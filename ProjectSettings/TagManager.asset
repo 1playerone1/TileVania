@@ -50,3 +50,6 @@ TagManager:
   - name: Platforms
     uniqueID: 3594309555
     locked: 0
+  - name: Player
+    uniqueID: 38803267
+    locked: 0
