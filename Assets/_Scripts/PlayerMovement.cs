@@ -9,26 +9,47 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 8f;
     [SerializeField] float fallSpeed = 1f;
+    [SerializeField] float jumpSpeed = 10f;
+    [SerializeField] float climbSpeed = 5f;
 
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
+    CapsuleCollider2D myBodyCollider;
+    BoxCollider2D myFeetCollider;
+    float gravityScaleAtStart;
 
     void Start()
     {
         myRigidbody= GetComponent<Rigidbody2D>();
         myAnimator= GetComponent<Animator>();
+        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        myFeetCollider = GetComponent<BoxCollider2D>();
+        gravityScaleAtStart = myRigidbody.gravityScale;
     }
+
     void Update()
     {
         Run();
         FlipSprite();
+        ClimbLadder();
     }
 
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
+    }
+
+    void OnJump(InputValue value)
+    {
+        if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
+
+        if(value.isPressed)
+        {
+            // do stuff
+            myRigidbody.velocity += new Vector2(0f, jumpSpeed);
+        }
     }
 
     void Run()
@@ -48,5 +69,25 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector2(Mathf.Sign(myRigidbody.velocity.x), 1f);
         }
+    }
+
+    void ClimbLadder()
+    {   
+        if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing"))) 
+        {
+            myRigidbody.gravityScale = gravityScaleAtStart;
+
+            myAnimator.SetBool("isClimbing", false);
+            return; 
+        }
+
+        Vector2 climbVelocity = new Vector2(myRigidbody.velocity.x, moveInput.y * climbSpeed);
+        myRigidbody.velocity = climbVelocity;
+
+        myRigidbody.gravityScale = 0f;
+
+        bool playerHasVerticallSpeed = Mathf.Abs(myRigidbody.velocity.y) > Mathf.Epsilon;
+
+        myAnimator.SetBool("isClimbing", playerHasVerticallSpeed);
     }
 }
