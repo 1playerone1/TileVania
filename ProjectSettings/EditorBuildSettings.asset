@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Levels/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Levels/Assets.unity
+    path: Assets/Levels/_Test Level.unity
     guid: 10d902da40334451e8037b61d34b9475
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: cf3cd2f74f58d664daf98c5cb984bc7e, type: 2}
