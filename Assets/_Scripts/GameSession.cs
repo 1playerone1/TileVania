@@ -14,7 +14,6 @@ public class GameSession : MonoBehaviour
     [SerializeField] TextMeshProUGUI livesText;
     [SerializeField] TextMeshProUGUI scoreText;
 
-    // Start is called before the first frame update
     void Awake()
     {
         int numGameSessions = FindObjectsOfType<GameSession>().Length;
@@ -27,7 +26,7 @@ public class GameSession : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-
+    // Start is called before the first frame update
     void Start()
     {
         livesText.text = playerLives.ToString();
@@ -62,6 +61,7 @@ public class GameSession : MonoBehaviour
 
     void ResetGameSession()
     {
+        FindObjectOfType<ScenePersist>().ResetScenePersist();
         SceneManager.LoadScene(0);
         Destroy(gameObject);
     }
